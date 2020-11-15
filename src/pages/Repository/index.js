@@ -1,5 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export default function Repository() {
-  return <h1>Repository</h1>;
+function Repository({ match }) {
+  return <h1>Repository: {decodeURIComponent(match.params.repository)}</h1>;
 }
+
+Repository.propTypes = {
+  match: PropTypes.string.isRequired,
+};
+
+export default Repository;

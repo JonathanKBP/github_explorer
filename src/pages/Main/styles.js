@@ -41,6 +41,11 @@ export const SubmitButton = styled.button.attrs((props) => ({
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: 0.2s;
+
+  &:hover {
+    opacity: 0.8;
+  }
 
   &[disabled] {
     cursor: not-allowed;
@@ -94,6 +99,11 @@ export const List = styled.ul`
     a {
       color: #000;
       text-decoration: none;
+      transition: 0.2s;
+
+      &:hover {
+        opacity: 0.8;
+      }
     }
   }
 `;

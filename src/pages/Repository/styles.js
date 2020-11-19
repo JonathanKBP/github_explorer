@@ -16,6 +16,11 @@ export const Header = styled.div`
     background: #000;
     border-radius: 4px;
     padding: 5px;
+    transition: 0.2s;
+
+    &:hover {
+      opacity: 0.8;
+    }
 
     p {
       margin-left: 5px;
@@ -129,9 +134,10 @@ export const IssueList = styled.ul`
       a {
         text-decoration: none;
         color: #333;
+        transition: 0.2s;
 
         &:hover {
-          color: #7159c1;
+          opacity: 0.8;
         }
       }
 

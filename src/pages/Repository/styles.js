@@ -1,23 +1,76 @@
-import styled from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 
-export const Loading = styled.div`
-  color: #000;
-  font-size: 30px;
-  font-weight: bold;
+export const Header = styled.div`
+  max-width: 700px;
+  margin: 40px auto;
   display: flex;
+  justify-content: space-between;
+
+  a {
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+    border-radius: 4px;
+    padding: 5px;
+
+    p {
+      margin-left: 5px;
+      font-weight: bolder;
+    }
+  }
+`;
+
+const rotate = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+export const Loading = styled.div.attrs((props) => ({
+  disabled: props.loading,
+}))`
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
+
+  p {
+    color: #000;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  ${(props) =>
+    props.loading &&
+    css`
+      svg {
+        animation: ${rotate} 2s linear infinite;
+      }
+    `}
 `;
+
 export const Owner = styled.header`
   display: flex;
   flex-direction: column;
   align-items: center;
 
+  Link {
+    background: #000;
+  }
   a {
-    color: #7159c1;
+    color: #fff;
     font-size: 16px;
     text-decoration: none;
+    margin-left: 5px;
   }
 
   img {

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { FaSpinner, FaArrowAltCircleLeft } from 'react-icons/fa';
 import api from '../../services/api';
 
-import { Loading, Owner, IssueList } from './styles';
+import { Loading, Owner, IssueList, Header } from './styles';
 import Container from '../../components/Container';
+import logo from '../../assets/logo.svg';
 
 export default class Repository extends Component {
   constructor() {
@@ -42,35 +44,53 @@ export default class Repository extends Component {
     const { repository, issues, loading } = this.state;
 
     if (loading) {
-      return <Loading>Carregando</Loading>;
+      return (
+        <Loading loading={loading}>
+          <p>Carregando</p>
+          <FaSpinner size={35} />
+        </Loading>
+      );
     }
 
     return (
-      <Container>
-        <Owner>
-          <Link to="/">Voltar aos repositórios</Link>
-          <img src={repository.owner.avatar_url} alt={repository.owner.login} />
-          <h1>{repository.name}</h1>
-          <p>{repository.description}</p>
-        </Owner>
+      <>
+        <Header>
+          <img src={logo} alt="Github Explorer" />
 
-        <IssueList>
-          {issues.map((issue) => (
-            <li key={String(issue.id)}>
-              <img src={issue.user.avatar_url} alt={issue.user.login} />
-              <div>
-                <strong>
-                  <a href={issue.html_url}>{issue.title}</a>
-                  {issue.labels.map((label) => (
-                    <span key={String(label.id)}>{label.name}</span>
-                  ))}
-                </strong>
-                <p>{issue.user.login}</p>
-              </div>
-            </li>
-          ))}
-        </IssueList>
-      </Container>
+          <Link to="/">
+            <FaArrowAltCircleLeft size={20} />
+            <p>Voltar</p>
+          </Link>
+        </Header>
+
+        <Container>
+          <Owner>
+            <img
+              src={repository.owner.avatar_url}
+              alt={repository.owner.login}
+            />
+            <h1>{repository.name}</h1>
+            <p>{repository.description}</p>
+          </Owner>
+
+          <IssueList>
+            {issues.map((issue) => (
+              <li key={String(issue.id)}>
+                <img src={issue.user.avatar_url} alt={issue.user.login} />
+                <div>
+                  <strong>
+                    <a href={issue.html_url}>{issue.title}</a>
+                    {issue.labels.map((label) => (
+                      <span key={String(label.id)}>{label.name}</span>
+                    ))}
+                  </strong>
+                  <p>{issue.user.login}</p>
+                </div>
+              </li>
+            ))}
+          </IssueList>
+        </Container>
+      </>
     );
   }
 }

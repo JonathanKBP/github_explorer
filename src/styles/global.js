@@ -14,14 +14,14 @@ export default createGlobalStyle`
     min-height: 100%;
   }
   body {
-    background: #F0F0F5 url(${githubBackground}) no-repeat 90% top;
+    background: #F0F0F5 url(${githubBackground}) no-repeat 85% top;
     -webkit-font-smoothing: antialiased !important;
   }
 
   body, input, button {
     color: #222;
     font-size: 12px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Roboto', sans-serif;
   }
 
   button{

@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
 
-import { FaGithubAlt, FaPlus, FaSpinner } from 'react-icons/fa';
+import {
+  FaArrowAltCircleRight,
+  FaGithubAlt,
+  FaPlus,
+  FaSpinner,
+} from 'react-icons/fa';
+
 import { Link } from 'react-router-dom';
 
 import api from '../../services/api';
 
 import Container from '../../components/Container';
-import { Form, SubmitButton, List } from './styles';
+import { Form, SubmitButton, List, LogoImg } from './styles';
+import logo from '../../assets/logo.svg';
 
 export default class Main extends Component {
   constructor() {
@@ -48,12 +55,12 @@ export default class Main extends Component {
 
     const response = await api.get(`/repos/${newRepo}`);
 
-    const data = {
-      name: response.data.full_name,
-    };
+    // const data = {
+    //   name: response.data.full_name,
+    // };
 
     this.setState({
-      repositories: [...repositories, data],
+      repositories: [...repositories, response.data],
       newRepo: '',
       loading: false,
     });
@@ -61,40 +68,55 @@ export default class Main extends Component {
 
   render() {
     const { newRepo, loading, repositories } = this.state;
+
     return (
-      <Container>
-        <h1>
-          <FaGithubAlt />
-          Repositórios
-        </h1>
+      <>
+        <LogoImg>
+          <img src={logo} alt="Github Explorer" />
+        </LogoImg>
+        <Container>
+          <h1>
+            <FaGithubAlt />
+            Repositórios
+          </h1>
 
-        <Form onSubmit={this.hanleSubmit}>
-          <input
-            type="text"
-            placeholder="Adicionar repositório"
-            value={newRepo}
-            onChange={this.handleInputChange}
-          />
-          <SubmitButton loading={loading}>
-            {loading ? (
-              <FaSpinner color="#FFF" size={14} />
-            ) : (
-              <FaPlus color="#FFF" size={14} />
-            )}
-          </SubmitButton>
-        </Form>
+          <Form onSubmit={this.hanleSubmit}>
+            <input
+              type="text"
+              placeholder="Adicionar repositório"
+              value={newRepo}
+              onChange={this.handleInputChange}
+            />
+            <SubmitButton loading={loading}>
+              {loading ? (
+                <FaSpinner color="#FFF" size={14} />
+              ) : (
+                <FaPlus color="#FFF" size={14} />
+              )}
+            </SubmitButton>
+          </Form>
 
-        <List>
-          {repositories.map((repository) => (
-            <li key={repository.name}>
-              <span>{repository.name}</span>
-              <Link to={`/repository/${encodeURIComponent(repository.name)}`}>
-                Detalhes
-              </Link>
-            </li>
-          ))}
-        </List>
-      </Container>
+          <List>
+            {repositories.map((repository) => (
+              <li key={repository.full_name}>
+                <img
+                  src={repository.owner.avatar_url}
+                  alt={repository.owner.login}
+                />
+                <div>
+                  <strong>{repository.full_name}</strong>
+                  <p>{repository.description}</p>
+                </div>
+                <Link
+                  to={`/repository/${encodeURIComponent(repository.full_name)}`}
+                >
+                  <FaArrowAltCircleRight size={25} />
+                </Link>
+              </li>
+            ))}
+          </List>
+        </Container>
+      </>
     );
   }
 }

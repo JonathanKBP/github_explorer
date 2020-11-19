@@ -1,5 +1,10 @@
 import styled, { keyframes, css } from 'styled-components';
 
+export const LogoImg = styled.div`
+  max-width: 700px;
+  margin: 40px auto;
+`;
+
 export const Form = styled.form`
   margin-top: 30px;
   display: flex;
@@ -27,7 +32,7 @@ export const SubmitButton = styled.button.attrs((props) => ({
   type: 'submit',
   disabled: props.loading,
 }))`
-  background: #7159c1;
+  background: #04d361;
   border: 0;
   padding: 0 15px;
   margin-left: 10px;
@@ -58,16 +63,36 @@ export const List = styled.ul`
   li {
     padding: 15px 0;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
 
     & + li {
       border-top: 1px solid #eee;
     }
 
+    img {
+      width: 75px;
+      border-radius: 50%;
+    }
+
+    div {
+      margin: 0 15px;
+      flex: 1;
+
+      strong {
+        font-size: 20px;
+        color: #3d3d4d;
+      }
+
+      p {
+        font-size: 18px;
+        color: #777787;
+        margin-top: 4px;
+      }
+    }
+
     a {
-      color: #7159c1;
+      color: #000;
       text-decoration: none;
     }
   }

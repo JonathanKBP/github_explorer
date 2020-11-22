@@ -6,13 +6,16 @@ import {
   FaPlus,
   FaSpinner,
 } from 'react-icons/fa';
+import Switch from 'react-switch';
+// import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
 import api from '../../services/api';
 
 import Container from '../../components/Container';
-import { Form, SubmitButton, List, LogoImg } from './styles';
+
+import { Form, SubmitButton, List, LogoImg, HeaderContainer } from './styles';
 import logo from '../../assets/logo.svg';
 
 export default class Main extends Component {
@@ -22,28 +25,46 @@ export default class Main extends Component {
       newRepo: '',
       repositories: [],
       loading: false,
+      theme: '',
     };
   }
 
   // Carregar os dados do localStorage
   componentDidMount() {
     const repositories = localStorage.getItem('repositories');
+    const theme = localStorage.getItem('theme');
 
     if (repositories) {
       this.setState({ repositories: JSON.parse(repositories) });
+    }
+    if (theme) {
+      this.setState({ theme: JSON.parse(theme) });
     }
   }
 
   // Salvar os dados do localStorage
   componentDidUpdate(_, prevState) {
-    const { repositories } = this.state;
+    const { repositories, theme } = this.state;
     if (prevState.repositories !== repositories) {
       localStorage.setItem('repositories', JSON.stringify(repositories));
+    }
+    if (prevState.theme !== theme) {
+      localStorage.setItem('theme', JSON.stringify(theme));
     }
   }
 
   handleInputChange = (e) => {
     this.setState({ newRepo: e.target.value });
+  };
+
+  switchTheme = () => {
+    const { theme } = this.state;
+
+    if (theme === 'light') {
+      this.setState({ theme: 'dark' });
+    } else {
+      this.setState({ theme: 'light' });
+    }
   };
 
   hanleSubmit = async (e) => {
@@ -67,18 +88,30 @@ export default class Main extends Component {
   };
 
   render() {
-    const { newRepo, loading, repositories } = this.state;
+    const { newRepo, loading, repositories, theme } = this.state;
 
     return (
       <>
         <LogoImg>
           <img src={logo} alt="Github Explorer" />
         </LogoImg>
+
         <Container>
-          <h1>
-            <FaGithubAlt />
-            Repositórios
-          </h1>
+          <HeaderContainer>
+            <h1>
+              <FaGithubAlt />
+              Repositórios
+            </h1>
+            <Switch
+              onChange={this.switchTheme}
+              checked={theme === 'light'}
+              checkedIcon={false}
+              uncheckedIcon={false}
+              height={20}
+              width={40}
+              onColor="#04d361"
+            />
+          </HeaderContainer>
 
           <Form onSubmit={this.hanleSubmit}>
             <input
@@ -120,3 +153,7 @@ export default class Main extends Component {
     );
   }
 }
+
+// Main.propTypes = {
+//   toggleTheme: PropTypes.func.isRequired,
+// };

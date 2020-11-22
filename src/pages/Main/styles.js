@@ -5,6 +5,11 @@ export const LogoImg = styled.div`
   margin: 40px auto;
 `;
 
+export const HeaderContainer = styled.header`
+  display: flex;
+  justify-content: space-between;
+`;
+
 export const Form = styled.form`
   margin-top: 30px;
   display: flex;
@@ -86,7 +91,7 @@ export const List = styled.ul`
 
       strong {
         font-size: 20px;
-        color: #3d3d4d;
+        color: ${(props) => props.theme.colors.title};
       }
 
       p {
@@ -97,7 +102,7 @@ export const List = styled.ul`
     }
 
     a {
-      color: #000;
+      color: ${(props) => props.theme.colors.secundary};
       text-decoration: none;
       transition: 0.2s;
 

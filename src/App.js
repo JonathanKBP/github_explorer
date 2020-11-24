@@ -1,25 +1,20 @@
 import React from 'react';
-import { ThemeProvider } from 'styled-components';
+// import { ThemeProvider } from 'styled-components';
 
 import Routes from './routes';
-import GlobalStyle from './styles/global';
-import usePersistedState from './hooks/usePersistedState';
-import light from './styles/themes/light';
-import dark from './styles/themes/dark';
+// import GlobalStyle from './styles/global';
+// import usePersistedState from './hooks/usePersistedState';
+// import light from './styles/themes/light';
+// import dark from './styles/themes/dark';
 
 function App() {
-  const [theme] = usePersistedState('theme', 'light');
+  // const [theme, setTheme] = usePersistedState('theme', 'light');
 
-  // const toggleTheme = () => {
-  //   setTheme(theme === 'light' ? dark : light);
-  // };
+  // useEffect(() => {
+  //   setTheme(localStorage.getItem('theme'));
+  // }, localStorage.getItem('theme'));
 
-  return (
-    <ThemeProvider theme={theme === 'light' ? dark : light}>
-      <GlobalStyle />
-      <Routes />
-    </ThemeProvider>
-  );
+  return <Routes />;
 }
 
 export default App;

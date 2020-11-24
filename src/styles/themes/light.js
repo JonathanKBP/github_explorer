@@ -12,6 +12,7 @@ export default {
 
     background: '#F0F0F8',
     backgroundImg: githubBackground,
+    border: '#ccc',
     text: '#222',
   },
 };

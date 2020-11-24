@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   FaArrowAltCircleRight,
@@ -7,153 +7,127 @@ import {
   FaSpinner,
 } from 'react-icons/fa';
 import Switch from 'react-switch';
-// import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
-
+import { ThemeProvider } from 'styled-components';
 import api from '../../services/api';
 
-import Container from '../../components/Container';
-
-import { Form, SubmitButton, List, LogoImg, HeaderContainer } from './styles';
 import logo from '../../assets/logo.svg';
+import logoDark from '../../assets/logoDark.svg';
+import { Form, SubmitButton, List, LogoImg, HeaderContainer } from './styles';
+import GlobalStyle from '../../styles/global';
+import light from '../../styles/themes/light';
+import dark from '../../styles/themes/dark';
+import Container from '../../components/Container';
+import usePersistedState from '../../hooks/usePersistedState';
+// import { toggleTheme } from '../../App';
 
-export default class Main extends Component {
-  constructor() {
-    super();
-    this.state = {
-      newRepo: '',
-      repositories: [],
-      loading: false,
-      theme: '',
-    };
-  }
+const Main = () => {
+  const [newRepo, setNewRepo] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [theme, setTheme] = usePersistedState('theme', light);
 
   // Carregar os dados do localStorage
-  componentDidMount() {
-    const repositories = localStorage.getItem('repositories');
-    const theme = localStorage.getItem('theme');
+  const [repositories, setRepositories] = useState(() => {
+    const storageRepositories = localStorage.getItem('repositories');
 
-    if (repositories) {
-      this.setState({ repositories: JSON.parse(repositories) });
+    if (storageRepositories) {
+      return JSON.parse(storageRepositories);
     }
-    if (theme) {
-      this.setState({ theme: JSON.parse(theme) });
-    }
+    return [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('repositories', JSON.stringify(repositories));
+  }, [repositories]);
+
+  useEffect(() => {
+    localStorage.setItem('theme', JSON.stringify(theme));
+  }, theme);
+
+  // Função para adicionar um novo repositório
+  async function handleAddRepository(event) {
+    event.preventDefault();
+    setLoading(true);
+
+    const response = await api.get(`repos/${newRepo}`);
+
+    const repository = response.data;
+
+    setRepositories([...repositories, repository]);
+    setNewRepo('');
+    setLoading(false);
   }
 
-  // Salvar os dados do localStorage
-  componentDidUpdate(_, prevState) {
-    const { repositories, theme } = this.state;
-    if (prevState.repositories !== repositories) {
-      localStorage.setItem('repositories', JSON.stringify(repositories));
-    }
-    if (prevState.theme !== theme) {
-      localStorage.setItem('theme', JSON.stringify(theme));
-    }
+  function switchTheme() {
+    setTheme(theme.title === 'light' ? dark : light);
   }
 
-  handleInputChange = (e) => {
-    this.setState({ newRepo: e.target.value });
-  };
+  return (
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <LogoImg>
+        <img
+          src={theme.title === 'light' ? logo : logoDark}
+          alt="Github Explorer"
+        />
+      </LogoImg>
 
-  switchTheme = () => {
-    const { theme } = this.state;
+      <Container>
+        <HeaderContainer>
+          <h1>
+            <FaGithubAlt />
+            Repositórios
+          </h1>
+          <Switch
+            onChange={switchTheme}
+            checked={theme.title === 'light'}
+            checkedIcon={false}
+            uncheckedIcon={false}
+            height={20}
+            width={40}
+            onColor="#04d361"
+          />
+        </HeaderContainer>
 
-    if (theme === 'light') {
-      this.setState({ theme: 'dark' });
-    } else {
-      this.setState({ theme: 'light' });
-    }
-  };
+        <Form onSubmit={handleAddRepository}>
+          <input
+            type="text"
+            placeholder="Adicionar repositório"
+            value={newRepo}
+            onChange={(e) => setNewRepo(e.target.value)}
+          />
+          <SubmitButton loading={loading}>
+            {loading ? (
+              <FaSpinner color="#FFF" size={14} />
+            ) : (
+              <FaPlus color="#FFF" size={14} />
+            )}
+          </SubmitButton>
+        </Form>
 
-  hanleSubmit = async (e) => {
-    e.preventDefault();
+        <List>
+          {repositories.map((repository) => (
+            <li key={repository.full_name}>
+              <img
+                src={repository.owner.avatar_url}
+                alt={repository.owner.login}
+              />
+              <div>
+                <strong>{repository.full_name}</strong>
+                <p>{repository.description}</p>
+              </div>
+              <Link
+                to={`/repository/${encodeURIComponent(repository.full_name)}`}
+              >
+                <FaArrowAltCircleRight size={25} />
+              </Link>
+            </li>
+          ))}
+        </List>
+      </Container>
+    </ThemeProvider>
+  );
+};
 
-    this.setState({ loading: true });
-
-    const { newRepo, repositories } = this.state;
-
-    const response = await api.get(`/repos/${newRepo}`);
-
-    // const data = {
-    //   name: response.data.full_name,
-    // };
-
-    this.setState({
-      repositories: [...repositories, response.data],
-      newRepo: '',
-      loading: false,
-    });
-  };
-
-  render() {
-    const { newRepo, loading, repositories, theme } = this.state;
-
-    return (
-      <>
-        <LogoImg>
-          <img src={logo} alt="Github Explorer" />
-        </LogoImg>
-
-        <Container>
-          <HeaderContainer>
-            <h1>
-              <FaGithubAlt />
-              Repositórios
-            </h1>
-            <Switch
-              onChange={this.switchTheme}
-              checked={theme === 'light'}
-              checkedIcon={false}
-              uncheckedIcon={false}
-              height={20}
-              width={40}
-              onColor="#04d361"
-            />
-          </HeaderContainer>
-
-          <Form onSubmit={this.hanleSubmit}>
-            <input
-              type="text"
-              placeholder="Adicionar repositório"
-              value={newRepo}
-              onChange={this.handleInputChange}
-            />
-            <SubmitButton loading={loading}>
-              {loading ? (
-                <FaSpinner color="#FFF" size={14} />
-              ) : (
-                <FaPlus color="#FFF" size={14} />
-              )}
-            </SubmitButton>
-          </Form>
-
-          <List>
-            {repositories.map((repository) => (
-              <li key={repository.full_name}>
-                <img
-                  src={repository.owner.avatar_url}
-                  alt={repository.owner.login}
-                />
-                <div>
-                  <strong>{repository.full_name}</strong>
-                  <p>{repository.description}</p>
-                </div>
-                <Link
-                  to={`/repository/${encodeURIComponent(repository.full_name)}`}
-                >
-                  <FaArrowAltCircleRight size={25} />
-                </Link>
-              </li>
-            ))}
-          </List>
-        </Container>
-      </>
-    );
-  }
-}
-
-// Main.propTypes = {
-//   toggleTheme: PropTypes.func.isRequired,
-// };
+export default Main;

@@ -17,7 +17,7 @@ export const Form = styled.form`
 
   input {
     flex: 1;
-    border: 1px solid #eee;
+    border: 1px solid ${(props) => props.theme.colors.border};
     padding: 10px 15px;
     border-radius: 4px;
     font-size: 16px;
@@ -77,7 +77,7 @@ export const List = styled.ul`
     align-items: center;
 
     & + li {
-      border-top: 1px solid #eee;
+      border-top: 1px solid ${(props) => props.theme.colors.border};
     }
 
     img {

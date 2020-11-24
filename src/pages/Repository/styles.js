@@ -7,7 +7,7 @@ export const Header = styled.div`
   justify-content: space-between;
 
   a {
-    color: #fff;
+    color: #f0f0f8;
     text-decoration: none;
     display: flex;
     flex-direction: row;
@@ -102,13 +102,13 @@ export const Owner = styled.header`
 export const IssueList = styled.ul`
   padding-top: 30px;
   margin-top: 30px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid ${(props) => props.theme.colors.border};
   list-style: none;
 
   li {
     display: flex;
     padding: 15px 10px;
-    border: 1px solid #eee;
+    border: 1px solid ${(props) => props.theme.colors.border};
     border-radius: 4px;
     margin-top: 10px;
   }
@@ -133,7 +133,7 @@ export const IssueList = styled.ul`
 
       a {
         text-decoration: none;
-        color: #333;
+        color: ${(props) => props.theme.colors.title};
         transition: 0.2s;
 
         &:hover {

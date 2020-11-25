@@ -14,7 +14,14 @@ import api from '../../services/api';
 
 import logo from '../../assets/logo.svg';
 import logoDark from '../../assets/logoDark.svg';
-import { Form, SubmitButton, List, LogoImg, HeaderContainer } from './styles';
+import {
+  Form,
+  SubmitButton,
+  List,
+  LogoImg,
+  HeaderContainer,
+  Err,
+} from './styles';
 import GlobalStyle from '../../styles/global';
 import light from '../../styles/themes/light';
 import dark from '../../styles/themes/dark';
@@ -26,6 +33,7 @@ const Main = () => {
   const [newRepo, setNewRepo] = useState('');
   const [loading, setLoading] = useState(false);
   const [theme, setTheme] = usePersistedState('theme', light);
+  const [inputErr, setInputErr] = useState('');
 
   // Carregar os dados do localStorage
   const [repositories, setRepositories] = useState(() => {
@@ -50,13 +58,38 @@ const Main = () => {
     event.preventDefault();
     setLoading(true);
 
-    const response = await api.get(`repos/${newRepo}`);
+    if (!newRepo) {
+      setInputErr('Digite autor/nome do repositório.');
+      setLoading(false);
+      return;
+    }
 
-    const repository = response.data;
+    try {
+      repositories.map((repository) => {
+        if (newRepo === repository.full_name) {
+          throw new Error('Repositório já adicionado');
+        }
+        return false;
+      });
+      const response = await api.get(`repos/${newRepo}`);
 
-    setRepositories([...repositories, repository]);
-    setNewRepo('');
-    setLoading(false);
+      const repository = response.data;
+
+      setRepositories([...repositories, repository]);
+      setNewRepo('');
+      setInputErr('');
+      setLoading(false);
+    } catch (err) {
+      switch (err.message) {
+        case 'Repositório já adicionado':
+          setInputErr(err.message);
+          break;
+        default:
+          setInputErr('Repositório não encontrado.');
+      }
+
+      setLoading(false);
+    }
   }
 
   function switchTheme() {
@@ -90,7 +123,7 @@ const Main = () => {
           />
         </HeaderContainer>
 
-        <Form onSubmit={handleAddRepository}>
+        <Form onSubmit={handleAddRepository} err={inputErr}>
           <input
             type="text"
             placeholder="Adicionar repositório"
@@ -105,6 +138,8 @@ const Main = () => {
             )}
           </SubmitButton>
         </Form>
+
+        {inputErr && <Err>{inputErr}</Err>}
 
         <List>
           {repositories.map((repository) => (

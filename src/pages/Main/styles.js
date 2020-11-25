@@ -10,7 +10,9 @@ export const HeaderContainer = styled.header`
   justify-content: space-between;
 `;
 
-export const Form = styled.form`
+export const Form = styled.form.attrs((props) => ({
+  err: props.err,
+}))`
   margin-top: 30px;
   display: flex;
   flex-direction: row;
@@ -21,7 +23,21 @@ export const Form = styled.form`
     padding: 10px 15px;
     border-radius: 4px;
     font-size: 16px;
+
+    ${(props) =>
+      props.err &&
+      css`
+        border-color: #c53030;
+      `}
   }
+`;
+
+export const Err = styled.span`
+  display: block;
+  color: #c53030;
+  margin-top: 8px;
+  font-weight: 900;
+  font-size: 16px;
 `;
 
 const rotate = keyframes`

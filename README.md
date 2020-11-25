@@ -13,6 +13,10 @@
 
 O **Github_explorer** é uma aplicação que foi desenvolvida visando permitir que um usuário busque por repositórios e suas issues com uma interface mais amigável, com a aplicação é possível buscar por repositórios e navegar pelas issues mais recentes.
 
+<p align=center>
+  <img src=".github/video.gif">
+</p>
+
 ## 🚀 Tecnologias Utilizadas
 
   * [ReactJS](https://pt-br.reactjs.org)

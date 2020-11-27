@@ -49,4 +49,4 @@ O **Github_explorer** é uma aplicação que foi desenvolvida visando permitir q
 
 ```
 
-Desenvolvido por 💻  Jonathan Kevin
+<p align=center> Desenvolvido por Jonathan Kevin 💻 </p>

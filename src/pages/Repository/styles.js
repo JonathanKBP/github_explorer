@@ -38,6 +38,8 @@ const rotate = keyframes`
   }
 `;
 
+export const Filter = styled.div``;
+
 export const Loading = styled.div.attrs((props) => ({
   disabled: props.loading,
 }))`

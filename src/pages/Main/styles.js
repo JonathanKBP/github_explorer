@@ -35,9 +35,9 @@ export const Form = styled.form.attrs((props) => ({
 export const Err = styled.span`
   display: block;
   color: #c53030;
-  margin-top: 8px;
   font-weight: 900;
   font-size: 16px;
+  margin-top: 8px;
 `;
 
 const rotate = keyframes`

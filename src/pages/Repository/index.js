@@ -7,7 +7,7 @@ import api from '../../services/api';
 
 import logo from '../../assets/logo.svg';
 import logoDark from '../../assets/logoDark.svg';
-import { Loading, Owner, IssueList, Header } from './styles';
+import { Loading, Owner, IssueList, Header /* Filter */ } from './styles';
 import GlobalStyle from '../../styles/global';
 import light from '../../styles/themes/light';
 import dark from '../../styles/themes/dark';
@@ -33,7 +33,7 @@ const Repository = (props) => {
       api.get(`/repos/${repoName}`),
       api.get(`/repos/${repoName}/issues`, {
         params: {
-          state: 'open',
+          state: 'all',
           per_page: 5,
         },
       }),
@@ -42,6 +42,19 @@ const Repository = (props) => {
     setIssues(issuesData.data);
     setLoading(false);
   }, []);
+
+  // async function handleAddFilterIssues(event) {
+  //   const issuesData = await api.get(
+  //     `/repos/${repository.full_name}/issues?state=${event}`,
+  //     {
+  //       params: {
+  //         state: 'all',
+  //         per_page: 5,
+  //       },
+  //     }
+  //   );
+  //   setIssues(issuesData.data);
+  // }
 
   if (loading) {
     return (
@@ -66,6 +79,9 @@ const Repository = (props) => {
           <p>Voltar</p>
         </Link>
       </Header>
+      {/* <Filter>
+        <button onClick>Teste</button>
+      </Filter> */}
 
       <Container>
         <Owner>

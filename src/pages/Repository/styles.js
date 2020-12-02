@@ -50,7 +50,7 @@ export const Loading = styled.div.attrs((props) => ({
   height: 100vh;
 
   p {
-    color: #000;
+    color: ${(props) => props.theme.colors.secundary};
     font-size: 30px;
     font-weight: bold;
     margin-bottom: 10px;

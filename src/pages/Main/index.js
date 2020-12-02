@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 
 import {
   FaArrowAltCircleRight,
@@ -9,7 +9,7 @@ import {
 import Switch from 'react-switch';
 
 import { Link } from 'react-router-dom';
-import { ThemeProvider } from 'styled-components';
+
 import api from '../../services/api';
 
 import logo from '../../assets/logo.svg';
@@ -22,17 +22,16 @@ import {
   HeaderContainer,
   Err,
 } from './styles';
-import GlobalStyle from '../../styles/global';
-import light from '../../styles/themes/light';
-import dark from '../../styles/themes/dark';
+
 import Container from '../../components/Container';
-import usePersistedState from '../../hooks/usePersistedState';
-// import { toggleTheme } from '../../App';
+
+import { ThemeSwitcherContext } from '../../context/Theme';
 
 const Main = () => {
   const [newRepo, setNewRepo] = useState('');
   const [loading, setLoading] = useState(false);
-  const [theme, setTheme] = usePersistedState('theme', light);
+
+  const { toggleTheme, theme } = useContext(ThemeSwitcherContext);
   const [inputErr, setInputErr] = useState('');
 
   // Carregar os dados do localStorage
@@ -51,7 +50,7 @@ const Main = () => {
 
   useEffect(() => {
     localStorage.setItem('theme', JSON.stringify(theme));
-  }, theme);
+  }, [theme]);
 
   // Função para adicionar um novo repositório
   async function handleAddRepository(event) {
@@ -92,13 +91,8 @@ const Main = () => {
     }
   }
 
-  function switchTheme() {
-    setTheme(theme.title === 'light' ? dark : light);
-  }
-
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
+    <>
       <LogoImg>
         <img
           src={theme.title === 'light' ? logo : logoDark}
@@ -113,7 +107,7 @@ const Main = () => {
             Repositórios
           </h1>
           <Switch
-            onChange={switchTheme}
+            onChange={toggleTheme}
             checked={theme.title === 'light'}
             checkedIcon={false}
             uncheckedIcon={false}
@@ -161,7 +155,7 @@ const Main = () => {
           ))}
         </List>
       </Container>
-    </ThemeProvider>
+    </>
   );
 };
 

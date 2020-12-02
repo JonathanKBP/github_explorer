@@ -1,24 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { FaSpinner, FaArrowAltCircleLeft } from 'react-icons/fa';
-import { ThemeProvider } from 'styled-components';
+import { ThemeContext } from 'styled-components';
 import api from '../../services/api';
 
 import logo from '../../assets/logo.svg';
 import logoDark from '../../assets/logoDark.svg';
 import { Loading, Owner, IssueList, Header /* Filter */ } from './styles';
-import GlobalStyle from '../../styles/global';
-import light from '../../styles/themes/light';
-import dark from '../../styles/themes/dark';
+// import GlobalStyle from '../../styles/global';
+// import light from '../../styles/themes/light';
+// import dark from '../../styles/themes/dark';
 import Container from '../../components/Container';
-import usePersistedState from '../../hooks/usePersistedState';
+// import usePersistedState from '../../hooks/usePersistedState';
 
 const Repository = (props) => {
-  const [theme] = usePersistedState('theme', light);
+  const theme = useContext(ThemeContext);
   const [repository, setRepository] = useState();
   const [issues, setIssues] = useState();
   const [loading, setLoading] = useState(true);
+
   // useEffect(() => {
   //   setTheme(localStorage.getItem('theme'));
   // }, [theme]);
@@ -66,8 +67,8 @@ const Repository = (props) => {
   }
 
   return (
-    <ThemeProvider theme={theme.title === 'light' ? light : dark}>
-      <GlobalStyle />
+    <>
+      {/* <GlobalStyle /> */}
       <Header>
         <img
           src={theme.title === 'light' ? logo : logoDark}
@@ -109,7 +110,7 @@ const Repository = (props) => {
           ))}
         </IssueList>
       </Container>
-    </ThemeProvider>
+    </>
   );
 };
 export default Repository;

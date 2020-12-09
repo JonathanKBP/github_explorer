@@ -26,9 +26,9 @@ const Repository = (props) => {
 
   const [issues, setIssues] = useState();
   const listFilter = [
-    { id: 0, name: 'all' },
-    { id: 1, name: 'open' },
-    { id: 2, name: 'closed' },
+    { id: 0, name: 'all', namePt: 'Todos' },
+    { id: 1, name: 'open', namePt: 'Abertos' },
+    { id: 2, name: 'closed', namePt: 'Fechados' },
   ];
   const [filter, setFilter] = useState(0);
   const [page, setPage] = useState(1);
@@ -119,7 +119,7 @@ const Repository = (props) => {
           <span>Filtro</span>
           <select value={filter} onChange={(e) => setFilter(e.target.value)}>
             {listFilter.map((item) => (
-              <option value={item.id}>{item.name}</option>
+              <option value={item.id}>{item.namePt}</option>
             ))}
           </select>
           <button type="button" onClick={handleAddFilterIssues}>

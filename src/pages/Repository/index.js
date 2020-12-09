@@ -43,8 +43,8 @@ const Repository = (props) => {
       api.get(`/repos/${repoName}/issues`, {
         params: {
           state: listFilter[filter].name,
-          per_page: 5,
           page,
+          per_page: 5,
         },
       }),
     ]);
@@ -53,14 +53,25 @@ const Repository = (props) => {
     setLoading(false);
   }, []);
 
+  useEffect(async () => {
+    const issuesData = await api.get(`/repos/${repository.full_name}/issues`, {
+      params: {
+        state: listFilter[filter].name,
+        page,
+        per_page: 5,
+      },
+    });
+    setIssues(issuesData.data);
+  }, [page]);
+
   async function handleAddFilterIssues(event) {
     event.preventDefault();
 
     const issuesData = await api.get(`/repos/${repository.full_name}/issues`, {
       params: {
         state: listFilter[filter].name,
-        per_page: 5,
         page,
+        per_page: 5,
       },
     });
     setIssues(issuesData.data);
@@ -76,13 +87,11 @@ const Repository = (props) => {
   }
 
   function handlePage(event) {
-    console.log('entrei');
     if (event === 'next') {
       setPage(page + 1);
     } else {
       setPage(page - 1);
     }
-    console.log(page);
   }
 
   return (

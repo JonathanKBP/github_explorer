@@ -47,7 +47,7 @@ export const BoxButtonPage = styled.div`
 `;
 
 export const ButtonPage = styled.button.attrs((props) => ({
-  disabled: props.page,
+  disabled: props.page === 1,
 }))`
   background: #000;
   border: 0;
@@ -62,14 +62,10 @@ export const ButtonPage = styled.button.attrs((props) => ({
   align-items: center;
   transition: 0.2s;
 
-  ${(props) =>
-    props.page === 1 &&
-    css`
-      &[disabled] {
-        cursor: not-allowed;
-        opacity: 0.6;
-      }
-    `}
+  &[disabled] {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
 `;
 
 export const Loading = styled.div.attrs((props) => ({

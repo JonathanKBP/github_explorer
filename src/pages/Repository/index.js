@@ -7,21 +7,31 @@ import api from '../../services/api';
 
 import logo from '../../assets/logo.svg';
 import logoDark from '../../assets/logoDark.svg';
-import { Loading, Owner, IssueList, Header, Filter } from './styles';
+import {
+  Loading,
+  Owner,
+  IssueList,
+  Header,
+  Filter,
+  BoxButtonPage,
+  ButtonPage,
+} from './styles';
 
 import Container from '../../components/Container';
 
 const Repository = (props) => {
   const theme = useContext(ThemeContext);
   const [repository, setRepository] = useState();
-  const [issues, setIssues] = useState();
   const [loading, setLoading] = useState(true);
+
+  const [issues, setIssues] = useState();
   const listFilter = [
     { id: 0, name: 'all' },
     { id: 1, name: 'open' },
     { id: 2, name: 'closed' },
   ];
   const [filter, setFilter] = useState(0);
+  const [page, setPage] = useState(1);
 
   useEffect(async () => {
     const { match } = props;
@@ -34,6 +44,7 @@ const Repository = (props) => {
         params: {
           state: listFilter[filter].name,
           per_page: 5,
+          page,
         },
       }),
     ]);
@@ -49,6 +60,7 @@ const Repository = (props) => {
       params: {
         state: listFilter[filter].name,
         per_page: 5,
+        page,
       },
     });
     setIssues(issuesData.data);
@@ -61,6 +73,16 @@ const Repository = (props) => {
         <FaSpinner size={35} />
       </Loading>
     );
+  }
+
+  function handlePage(event) {
+    console.log('entrei');
+    if (event === 'next') {
+      setPage(page + 1);
+    } else {
+      setPage(page - 1);
+    }
+    console.log(page);
   }
 
   return (
@@ -114,6 +136,14 @@ const Repository = (props) => {
             </li>
           ))}
         </IssueList>
+
+        <BoxButtonPage>
+          <ButtonPage page={page} onClick={() => handlePage('previous')}>
+            Anterior
+          </ButtonPage>
+
+          <ButtonPage onClick={() => handlePage('next')}>Próxima</ButtonPage>
+        </BoxButtonPage>
       </Container>
     </>
   );

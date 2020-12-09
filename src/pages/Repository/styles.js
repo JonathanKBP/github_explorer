@@ -40,6 +40,38 @@ const rotate = keyframes`
 
 export const Filter = styled.div``;
 
+export const BoxButtonPage = styled.div`
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const ButtonPage = styled.button.attrs((props) => ({
+  disabled: props.page,
+}))`
+  background: #000;
+  border: 0;
+  padding: 7px;
+  border-radius: 4px;
+
+  font-size: 15px;
+  color: #f0f0f8;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.2s;
+
+  ${(props) =>
+    props.page === 1 &&
+    css`
+      &[disabled] {
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+    `}
+`;
+
 export const Loading = styled.div.attrs((props) => ({
   disabled: props.loading,
 }))`

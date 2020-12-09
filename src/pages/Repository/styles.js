@@ -38,7 +38,46 @@ const rotate = keyframes`
   }
 `;
 
-export const Filter = styled.div``;
+export const Filter = styled.div`
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+
+  span {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  select {
+    margin-left: 10px;
+    border-radius: 2px;
+    border: 0;
+    padding: 5px;
+
+    transition: 0.2s;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  button {
+    background: #108a46;
+    border: 0;
+    padding: 7px;
+    margin-left: 10px;
+    border-radius: 4px;
+    font-weight: 600;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.2s;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+`;
 
 export const BoxButtonPage = styled.div`
   margin-top: 10px;

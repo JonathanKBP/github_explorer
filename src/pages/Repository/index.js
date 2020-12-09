@@ -7,23 +7,21 @@ import api from '../../services/api';
 
 import logo from '../../assets/logo.svg';
 import logoDark from '../../assets/logoDark.svg';
-import { Loading, Owner, IssueList, Header /* Filter */ } from './styles';
-// import GlobalStyle from '../../styles/global';
-// import light from '../../styles/themes/light';
-// import dark from '../../styles/themes/dark';
+import { Loading, Owner, IssueList, Header, Filter } from './styles';
+
 import Container from '../../components/Container';
-// import usePersistedState from '../../hooks/usePersistedState';
 
 const Repository = (props) => {
   const theme = useContext(ThemeContext);
   const [repository, setRepository] = useState();
   const [issues, setIssues] = useState();
   const [loading, setLoading] = useState(true);
-
-  // useEffect(() => {
-  //   setTheme(localStorage.getItem('theme'));
-  // }, [theme]);
-  // const [loading, setLoading] = useState(true);
+  const listFilter = [
+    { id: 0, name: 'all' },
+    { id: 1, name: 'open' },
+    { id: 2, name: 'closed' },
+  ];
+  const [filter, setFilter] = useState(0);
 
   useEffect(async () => {
     const { match } = props;
@@ -34,7 +32,7 @@ const Repository = (props) => {
       api.get(`/repos/${repoName}`),
       api.get(`/repos/${repoName}/issues`, {
         params: {
-          state: 'all',
+          state: listFilter[filter].name,
           per_page: 5,
         },
       }),
@@ -44,18 +42,17 @@ const Repository = (props) => {
     setLoading(false);
   }, []);
 
-  // async function handleAddFilterIssues(event) {
-  //   const issuesData = await api.get(
-  //     `/repos/${repository.full_name}/issues?state=${event}`,
-  //     {
-  //       params: {
-  //         state: 'all',
-  //         per_page: 5,
-  //       },
-  //     }
-  //   );
-  //   setIssues(issuesData.data);
-  // }
+  async function handleAddFilterIssues(event) {
+    event.preventDefault();
+
+    const issuesData = await api.get(`/repos/${repository.full_name}/issues`, {
+      params: {
+        state: listFilter[filter].name,
+        per_page: 5,
+      },
+    });
+    setIssues(issuesData.data);
+  }
 
   if (loading) {
     return (
@@ -68,7 +65,6 @@ const Repository = (props) => {
 
   return (
     <>
-      {/* <GlobalStyle /> */}
       <Header>
         <img
           src={theme.title === 'light' ? logo : logoDark}
@@ -80,9 +76,6 @@ const Repository = (props) => {
           <p>Voltar</p>
         </Link>
       </Header>
-      {/* <Filter>
-        <button onClick>Teste</button>
-      </Filter> */}
 
       <Container>
         <Owner>
@@ -90,6 +83,18 @@ const Repository = (props) => {
           <h1>{repository.name}</h1>
           <p>{repository.description}</p>
         </Owner>
+
+        <Filter>
+          <span>Filtro</span>
+          <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+            {listFilter.map((item) => (
+              <option value={item.id}>{item.name}</option>
+            ))}
+          </select>
+          <button type="button" onClick={handleAddFilterIssues}>
+            Filtrar
+          </button>
+        </Filter>
 
         <IssueList>
           {issues.map((issue) => (
